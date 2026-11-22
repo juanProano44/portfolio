@@ -12,6 +12,15 @@ decisions:
   - title: 'Event-driven communication'
     description: 'Used AWS EventBridge for asynchronous inter-service communication, reducing coupling and improving resilience.'
 outcome: 'Delivered a production-ready platform with automated deployments, comprehensive monitoring, and infrastructure that scales with business needs.'
+kpis:
+  - label: Microservices in production
+    value: '2–3'
+  - label: Platform uptime
+    value: '>99%'
+  - label: Automated CI/CD pipelines
+    value: '1–2'
+  - label: Engineering team
+    value: '3–5'
 codeAvailability: 'Private'
 featured: true
 order: 1

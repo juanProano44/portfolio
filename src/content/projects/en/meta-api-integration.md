@@ -10,6 +10,13 @@ decisions:
   - title: 'Webhook processing pipeline'
     description: 'Built a robust webhook handler that validates, transforms, and routes incoming Meta API events to the appropriate CRM channels.'
 outcome: 'Enabled real-time customer communication through a unified CRM interface, reducing response times and improving customer satisfaction.'
+kpis:
+  - label: Messages processed
+    value: Hundreds per day
+  - label: CRM operators supported
+    value: '5–15'
+  - label: Delivery model
+    value: Real-time WebSockets
 codeAvailability: 'Private'
 featured: true
 order: 3

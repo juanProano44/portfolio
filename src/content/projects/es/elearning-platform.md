@@ -10,6 +10,13 @@ decisions:
   - title: 'Diseño orientado a componentes'
     description: 'Construimos una librería de componentes reutilizables desde los diseños de Figma, permitiendo UI consistente en la plataforma y desarrollo más rápido de features.'
 outcome: 'Entregamos un frontend responsivo y accesible que mejoró la experiencia de aprendizaje y redujo el tiempo de desarrollo para nuevas funcionalidades.'
+kpis:
+  - label: Estudiantes activos
+    value: '~500'
+  - label: Entrega de UI
+    value: Librería de componentes reutilizable
+  - label: Objetivo de rendimiento
+    value: Lighthouse 90+
 codeAvailability: 'Private'
 featured: true
 order: 2

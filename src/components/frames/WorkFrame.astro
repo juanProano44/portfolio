@@ -1,4 +1,6 @@
 ---
+import ProjectKpiList from '@/components/ProjectKpiList.astro';
+import { codeAvailabilityBadgeClass, codeAvailabilityLabel } from '@/lib/projects';
 import type { Lang } from '@/scripts/i18n';
 import { t } from '@/scripts/i18n';
 import { getCollection } from 'astro:content';
@@ -13,6 +15,8 @@ const allProjects = await getCollection('projects');
 const projects = allProjects
   .filter((p) => p.data.lang === lang)
   .sort((a, b) => a.data.order - b.data.order);
+
+const kpiTitle = t(lang, 'work.kpis.title');
 ---
 
 <section id="work" class="frame work-frame" aria-label={t(lang, 'nav.work')}>
@@ -25,31 +29,30 @@ const projects = allProjects
           <article class="project-card" data-featured={project.data.featured || undefined}>
             <div class="card-header">
               <h3 class="card-title">{project.data.title}</h3>
-              <span class={`availability-badge badge-${project.data.codeAvailability.toLowerCase().replace(' ', '-')}`}>
-                {t(lang, `work.codeAvailability.${project.data.codeAvailability}` as keyof typeof import('@/scripts/i18n').ui.en)}
+              <span class:list={['availability-badge', codeAvailabilityBadgeClass(project.data.codeAvailability)]}>
+                {codeAvailabilityLabel(lang, project.data.codeAvailability)}
               </span>
             </div>
             <p class="card-summary">{project.data.summary}</p>
+            <ProjectKpiList kpis={project.data.kpis} title={kpiTitle} variant="card" />
             <div class="card-stack">
               {project.data.stack.map((tech) => (
                 <span class="tech-tag">{tech}</span>
               ))}
             </div>
             <details class="card-details">
-              <summary class="details-toggle">
-                {lang === 'en' ? 'View case study' : 'Ver caso de estudio'}
-              </summary>
+              <summary class="details-toggle">{t(lang, 'work.caseStudy.toggle')}</summary>
               <div class="case-study">
                 <div class="case-meta">
                   <div class="meta-item">
-                    <strong>{lang === 'en' ? 'Role' : 'Rol'}:</strong> {project.data.role}
+                    <strong>{t(lang, 'work.caseStudy.role')}:</strong> {project.data.role}
                   </div>
                   <div class="meta-item">
-                    <strong>{lang === 'en' ? 'Problem' : 'Problema'}:</strong> {project.data.problem}
+                    <strong>{t(lang, 'work.caseStudy.problem')}:</strong> {project.data.problem}
                   </div>
                 </div>
                 <div class="case-decisions">
-                  <h4>{lang === 'en' ? 'Key Decisions' : 'Decisiones Clave'}</h4>
+                  <h4>{t(lang, 'work.caseStudy.decisions')}</h4>
                   {project.data.decisions.map((d) => (
                     <div class="decision">
                       <strong>{d.title}:</strong> {d.description}
@@ -57,7 +60,7 @@ const projects = allProjects
                   ))}
                 </div>
                 <div class="case-outcome">
-                  <h4>{lang === 'en' ? 'Outcome' : 'Resultado'}</h4>
+                  <h4>{t(lang, 'work.caseStudy.outcome')}</h4>
                   <p>{project.data.outcome}</p>
                 </div>
               </div>

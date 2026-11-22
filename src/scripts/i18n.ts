@@ -18,6 +18,12 @@ export const ui = {
     'work.codeAvailability.Public': 'Public',
     'work.codeAvailability.Private': 'Private',
     'work.codeAvailability.On request': 'On request',
+    'work.caseStudy.toggle': 'View case study',
+    'work.caseStudy.role': 'Role',
+    'work.caseStudy.problem': 'Problem',
+    'work.caseStudy.decisions': 'Key decisions',
+    'work.caseStudy.outcome': 'Outcome',
+    'work.kpis.title': 'Impact metrics',
     'stack.title': 'Stack',
     'experience.title': 'Experience',
     'experience.education': 'Education',
@@ -51,6 +57,12 @@ export const ui = {
     'work.codeAvailability.Public': 'Público',
     'work.codeAvailability.Private': 'Privado',
     'work.codeAvailability.On request': 'Bajo solicitud',
+    'work.caseStudy.toggle': 'Ver caso de estudio',
+    'work.caseStudy.role': 'Rol',
+    'work.caseStudy.problem': 'Problema',
+    'work.caseStudy.decisions': 'Decisiones clave',
+    'work.caseStudy.outcome': 'Resultado',
+    'work.kpis.title': 'Métricas de impacto',
     'stack.title': 'Stack',
     'experience.title': 'Experiencia',
     'experience.education': 'Educación',
@@ -71,7 +83,9 @@ export const ui = {
   },
 } as const;
 
-export function t(lang: Lang, key: keyof (typeof ui)['en']): string {
+export type UiKey = keyof (typeof ui)['en'];
+
+export function t(lang: Lang, key: UiKey): string {
   return ui[lang][key] ?? ui[defaultLang][key] ?? key;
 }
 

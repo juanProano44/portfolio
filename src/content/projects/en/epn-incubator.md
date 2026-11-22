@@ -10,6 +10,13 @@ decisions:
   - title: 'Custom theme development'
     description: 'Built a custom theme to match the university branding guidelines while maintaining performance and accessibility standards.'
 outcome: 'Launched a functional website that served as the incubator public presence, enabling program applications and event promotion.'
+kpis:
+  - label: Delivery
+    value: Custom WordPress theme
+  - label: Content workflow
+    value: Non-technical editors
+  - label: Coverage
+    value: Responsive layouts
 codeAvailability: 'On request'
 featured: false
 order: 4

@@ -10,6 +10,13 @@ decisions:
   - title: 'Desarrollo de tema personalizado'
     description: 'Construimos un tema personalizado que cumple con las guías de marca de la universidad manteniendo estándares de rendimiento y accesibilidad.'
 outcome: 'Lanzamos un sitio web funcional que sirvió como presencia pública de la incubadora, habilitando postulaciones a programas y promoción de eventos.'
+kpis:
+  - label: Entrega
+    value: Tema WordPress personalizado
+  - label: Flujo de contenido
+    value: Editores no técnicos
+  - label: Cobertura
+    value: Layouts responsivos
 codeAvailability: 'On request'
 featured: false
 order: 4

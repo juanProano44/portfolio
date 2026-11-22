@@ -4,6 +4,11 @@ import { glob } from 'astro/loaders';
 
 const codeAvailability = z.enum(['Public', 'Private', 'On request']);
 
+const projectKpi = z.object({
+  label: z.string(),
+  value: z.string(),
+});
+
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
@@ -19,6 +24,7 @@ const projects = defineCollection({
       }),
     ),
     outcome: z.string(),
+    kpis: z.array(projectKpi).default([]),
     codeAvailability: codeAvailability,
     featured: z.boolean().default(false),
     order: z.number().default(0),

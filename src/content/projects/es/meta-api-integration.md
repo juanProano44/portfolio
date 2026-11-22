@@ -10,6 +10,13 @@ decisions:
   - title: 'Pipeline de procesamiento de webhooks'
     description: 'Construimos un manejador robusto de webhooks que valida, transforma y enruta eventos entrantes de la API de Meta a los canales apropiados del CRM.'
 outcome: 'Habilitamos comunicación con clientes en tiempo real a través de una interfaz CRM unificada, reduciendo tiempos de respuesta y mejorando la satisfacción del cliente.'
+kpis:
+  - label: Mensajes procesados
+    value: Cientos por día
+  - label: Operadores en CRM
+    value: '5–15'
+  - label: Modelo de entrega
+    value: WebSockets en tiempo real
 codeAvailability: 'Private'
 featured: true
 order: 3

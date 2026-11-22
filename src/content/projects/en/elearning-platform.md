@@ -10,6 +10,13 @@ decisions:
   - title: 'Component-driven design'
     description: 'Built a reusable component library from Figma designs, enabling consistent UI across the platform and faster feature development.'
 outcome: 'Delivered a responsive, accessible frontend that improved the learning experience and reduced development time for new features.'
+kpis:
+  - label: Active students
+    value: '~500'
+  - label: UI delivery
+    value: Reusable component library
+  - label: Performance target
+    value: Lighthouse 90+
 codeAvailability: 'Private'
 featured: true
 order: 2

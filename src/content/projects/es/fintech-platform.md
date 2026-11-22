@@ -12,6 +12,15 @@ decisions:
   - title: 'Comunicación event-driven'
     description: 'Usamos AWS EventBridge para comunicación asíncrona entre servicios, reduciendo el acoplamiento y mejorando la resiliencia.'
 outcome: 'Entregamos una plataforma lista para producción con despliegues automatizados, monitoreo integral e infraestructura que escala con las necesidades del negocio.'
+kpis:
+  - label: Microservicios en producción
+    value: '2–3'
+  - label: Disponibilidad de plataforma
+    value: '>99%'
+  - label: Pipelines CI/CD automatizados
+    value: '1–2'
+  - label: Equipo de ingeniería
+    value: '3–5'
 codeAvailability: 'Private'
 featured: true
 order: 1
