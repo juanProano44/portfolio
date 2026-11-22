@@ -16,6 +16,24 @@ const lang = 'en' as const;
   import '@/scripts/board';
   import '@/scripts/intro';
   import '@/scripts/dots';
+  // Lab is lazy-loaded via IntersectionObserver in its own module
+  const labMount = document.querySelector('[data-lab-mount]');
+  if (labMount) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          import('@/scripts/lab');
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '300px' },
+    );
+    observer.observe(labMount);
+    document.querySelector('[data-lab-poster]')?.addEventListener('click', () => {
+      import('@/scripts/lab');
+      observer.disconnect();
+    }, { once: true });
+  }
 </script>
 
 <BaseLayout

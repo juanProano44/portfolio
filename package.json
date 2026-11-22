@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.6",
-    "astro": "^7.4.13"
+    "astro": "^7.4.13",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
@@ -26,6 +27,7 @@
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource-variable/space-grotesk": "^5.3.0",
     "@types/node": "^26.6.6",
+    "@types/three": "^0.187.0",
     "eslint": "^10.15.0",
     "eslint-plugin-astro": "^3.2.1",
     "prettier": "^3.10.1",
