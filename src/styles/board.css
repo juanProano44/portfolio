@@ -1,33 +1,17 @@
-/* ── Board Layout ── */
+/* ── Board layout: always stacked; navigation scrolls to frames ── */
 .board {
   position: relative;
   width: 100%;
 }
 
-/* Board mode: frames positioned for camera transitions */
-.board.board-mode {
-  height: 100dvh;
-  overflow: hidden;
+.board .frame {
+  scroll-margin-top: calc(var(--header-height) + var(--space-4));
 }
 
-.board.board-mode .frame {
-  min-height: calc(100dvh - var(--header-height));
-  transition: opacity var(--duration-normal) var(--ease-out);
-}
-
-.board.board-mode .frame.frame-active {
-  opacity: 1;
-}
-
-/* Stack mode (narrow / no-JS): normal flow */
-.board:not(.board-mode) .frame {
-  opacity: 1 !important;
-}
-
-/* Frame navigation hint (keyboard shortcut) */
+/* Keyboard hint on wide screens (Alt+↑↓ between sections) */
 @media (min-width: 1024px) {
-  .board.board-mode::after {
-    content: '↑↓';
+  .board::after {
+    content: 'Alt+↑↓';
     position: fixed;
     bottom: var(--space-4);
     right: var(--space-4);
@@ -39,16 +23,12 @@
     border-radius: var(--border-radius-sm);
     opacity: 0.6;
     pointer-events: none;
+    z-index: var(--z-above);
   }
 }
 
-/* Reduced motion: no camera transitions */
 @media (prefers-reduced-motion: reduce) {
-  .board.board-mode {
-    transition: none !important;
-  }
-
-  .board.board-mode .frame {
-    transition: none !important;
+  html {
+    scroll-behavior: auto;
   }
 }

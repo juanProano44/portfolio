@@ -1,6 +1,7 @@
 /**
- * Board navigation: manages frame-to-frame camera transitions on wide screens.
- * On narrow screens or no-JS, sections stack normally.
+ * Frame navigation without scroll hijacking (SDD 3.3).
+ * Sections stay in normal document flow so tall frames (Work, Experience) scroll fully.
+ * Nav / keyboard: smooth scroll to frame + hash + focus.
  */
 
 interface FrameInfo {
@@ -9,18 +10,25 @@ interface FrameInfo {
   index: number;
 }
 
-const BOARD_MIN_WIDTH = 1024;
 const TRANSITION_DURATION = 500;
+const HEADER_OFFSET_VAR = '--header-height';
 
 let frames: FrameInfo[] = [];
 let currentIndex = 0;
-let boardEl: HTMLElement | null = null;
-let isBoardMode = false;
+let scrollRaf = 0;
+
+function getHeaderOffset(): number {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(HEADER_OFFSET_VAR).trim();
+  const parsed = parseFloat(raw);
+  if (Number.isFinite(parsed)) {
+    return parsed * (raw.endsWith('rem') ? 16 : 1);
+  }
+  return 56;
+}
 
 function getFrameElements(): FrameInfo[] {
   const board = document.querySelector<HTMLElement>('[data-board]');
   if (!board) return [];
-  boardEl = board;
 
   const sections = board.querySelectorAll<HTMLElement>('.frame');
   return Array.from(sections).map((el, index) => ({
@@ -30,65 +38,41 @@ function getFrameElements(): FrameInfo[] {
   }));
 }
 
-function enableBoardMode(): void {
-  if (!boardEl || isBoardMode) return;
-  isBoardMode = true;
-  boardEl.classList.add('board-mode');
-  navigateToFrame(currentIndex, false);
-}
-
-function disableBoardMode(): void {
-  if (!boardEl || !isBoardMode) return;
-  isBoardMode = false;
-  boardEl.classList.remove('board-mode');
-  boardEl.style.transform = '';
-
-  frames.forEach((f) => {
-    f.el.style.transform = '';
-    f.el.style.opacity = '';
-  });
-}
-
-function navigateToFrame(index: number, animate = true): void {
-  if (!isBoardMode || !boardEl) return;
+function scrollToFrame(index: number, behavior: ScrollBehavior = 'smooth'): void {
   if (index < 0 || index >= frames.length) return;
 
   currentIndex = index;
   const target = frames[index];
+  const top = target.el.getBoundingClientRect().top + window.scrollY - getHeaderOffset() - 8;
 
-  frames.forEach((f, i) => {
-    if (i === index) {
-      f.el.classList.add('frame-active');
-      f.el.style.opacity = '1';
-    } else {
-      f.el.classList.remove('frame-active');
-      f.el.style.opacity = '0.3';
-    }
-  });
+  window.scrollTo({ top, behavior });
 
-  const offsetY = target.el.offsetTop;
-  boardEl.style.transition = animate
-    ? `transform ${TRANSITION_DURATION}ms cubic-bezier(0.16, 1, 0.3, 1)`
-    : 'none';
-  boardEl.style.transform = `translateY(-${offsetY}px)`;
-
-  // Update hash without scrolling
   const newHash = `#${target.id}`;
   if (window.location.hash !== newHash) {
     history.replaceState(null, '', newHash);
   }
 
-  // Focus management
-  const heading = target.el.querySelector('h1, h2');
-  if (heading instanceof HTMLElement) {
-    heading.setAttribute('tabindex', '-1');
-    heading.focus({ preventScroll: true });
-  }
+  updateActiveStates(target.id);
 
-  // Update nav active state
+  if (behavior === 'auto') return;
+
+  window.setTimeout(() => {
+    const heading = target.el.querySelector('h1, h2');
+    if (heading instanceof HTMLElement) {
+      heading.setAttribute('tabindex', '-1');
+      heading.focus({ preventScroll: true });
+    }
+  }, TRANSITION_DURATION);
+}
+
+function updateActiveStates(activeId: string): void {
+  frames.forEach((f) => {
+    f.el.classList.toggle('frame-active', f.id === activeId);
+  });
+
   document.querySelectorAll('[data-frame]').forEach((link) => {
     if (link instanceof HTMLElement) {
-      link.classList.toggle('is-active', link.dataset.frame === target.id);
+      link.classList.toggle('is-active', link.dataset.frame === activeId);
     }
   });
 }
@@ -99,31 +83,68 @@ function getFrameIndexFromHash(): number {
   return idx >= 0 ? idx : 0;
 }
 
-function handleKeyboard(e: KeyboardEvent): void {
-  if (!isBoardMode) return;
+function syncCurrentFromScroll(): void {
+  if (frames.length === 0) return;
 
-  // Ignore if user is in an input
+  const offset = getHeaderOffset() + 48;
+  let best = 0;
+  let bestDist = Infinity;
+
+  frames.forEach((f, i) => {
+    const rect = f.el.getBoundingClientRect();
+    const dist = Math.abs(rect.top - offset);
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = i;
+    }
+  });
+
+  if (best !== currentIndex) {
+    currentIndex = best;
+    updateActiveStates(frames[best].id);
+  }
+}
+
+function onScroll(): void {
+  cancelAnimationFrame(scrollRaf);
+  scrollRaf = requestAnimationFrame(syncCurrentFromScroll);
+}
+
+function handleKeyboard(e: KeyboardEvent): void {
   const tag = (e.target as HTMLElement).tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+  // Only when focus is on body or within the board (avoid hijacking unrelated shortcuts)
+  const active = document.activeElement;
+  const inBoard =
+    active === document.body ||
+    active === document.documentElement ||
+    (active instanceof HTMLElement && active.closest('[data-board]'));
+
+  if (!inBoard && active instanceof HTMLElement && !active.closest('.frame-nav')) return;
 
   switch (e.key) {
     case 'ArrowDown':
     case 'ArrowRight':
+      if (!e.altKey) return;
       e.preventDefault();
-      navigateToFrame(Math.min(currentIndex + 1, frames.length - 1));
+      scrollToFrame(Math.min(currentIndex + 1, frames.length - 1));
       break;
     case 'ArrowUp':
     case 'ArrowLeft':
+      if (!e.altKey) return;
       e.preventDefault();
-      navigateToFrame(Math.max(currentIndex - 1, 0));
+      scrollToFrame(Math.max(currentIndex - 1, 0));
       break;
     case 'Home':
+      if (!e.ctrlKey) return;
       e.preventDefault();
-      navigateToFrame(0);
+      scrollToFrame(0);
       break;
     case 'End':
+      if (!e.ctrlKey) return;
       e.preventDefault();
-      navigateToFrame(frames.length - 1);
+      scrollToFrame(frames.length - 1);
       break;
   }
 }
@@ -131,36 +152,26 @@ function handleKeyboard(e: KeyboardEvent): void {
 function handleNavClicks(): void {
   document.querySelectorAll<HTMLAnchorElement>('[data-frame]').forEach((link) => {
     link.addEventListener('click', (e) => {
-      if (!isBoardMode) return;
-      e.preventDefault();
       const frameId = link.dataset.frame;
       const idx = frames.findIndex((f) => f.id === frameId);
-      if (idx >= 0) navigateToFrame(idx);
+      if (idx >= 0) {
+        e.preventDefault();
+        scrollToFrame(idx);
+      }
     });
   });
 
-  // Handle anchor links in content (like #contact, #work)
   document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
     link.addEventListener('click', (e) => {
-      if (!isBoardMode) return;
       const targetId = link.getAttribute('href')?.slice(1);
       if (!targetId) return;
       const idx = frames.findIndex((f) => f.id === targetId);
       if (idx >= 0) {
         e.preventDefault();
-        navigateToFrame(idx);
+        scrollToFrame(idx);
       }
     });
   });
-}
-
-function handleResize(): void {
-  const wide = window.innerWidth >= BOARD_MIN_WIDTH;
-  if (wide && !isBoardMode) {
-    enableBoardMode();
-  } else if (!wide && isBoardMode) {
-    disableBoardMode();
-  }
 }
 
 function init(): void {
@@ -168,15 +179,22 @@ function init(): void {
   if (frames.length === 0) return;
 
   currentIndex = getFrameIndexFromHash();
-  handleResize();
+  updateActiveStates(frames[currentIndex].id);
   handleNavClicks();
+
+  if (window.location.hash) {
+    requestAnimationFrame(() => {
+      scrollToFrame(currentIndex, 'auto');
+    });
+  }
 
   window.addEventListener('keydown', handleKeyboard);
   window.addEventListener('hashchange', () => {
     const idx = getFrameIndexFromHash();
-    if (idx !== currentIndex) navigateToFrame(idx);
+    if (idx !== currentIndex) scrollToFrame(idx);
   });
-  window.addEventListener('resize', handleResize);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  syncCurrentFromScroll();
 }
 
 if (document.readyState === 'loading') {
@@ -187,4 +205,4 @@ if (document.readyState === 'loading') {
 
 document.addEventListener('astro:after-swap', init);
 
-export { navigateToFrame, frames, currentIndex };
+export { scrollToFrame as navigateToFrame, frames, currentIndex };
