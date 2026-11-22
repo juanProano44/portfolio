@@ -1,0 +1,30 @@
+{
+  "id": "skills-en",
+  "categories": [
+    {
+      "name": "Frontend",
+      "items": ["React", "TypeScript", "Expo", "Three.js", "Astro", "HTML/CSS"]
+    },
+    {
+      "name": "Backend",
+      "items": ["NestJS", "Node.js", "REST APIs", "WebSockets"]
+    },
+    {
+      "name": "Databases",
+      "items": ["PostgreSQL", "SQL Server"]
+    },
+    {
+      "name": "Cloud & DevOps",
+      "items": ["AWS (EC2, S3, Route 53, EventBridge, IAM, VPC)", "Terraform", "Docker", "GitHub Actions"]
+    },
+    {
+      "name": "Tools & Practices",
+      "items": ["Jest", "Postman", "Figma", "Jira", "Dify", "SonarQube", "Agile", "Microservices", "KISS"]
+    },
+    {
+      "name": "Languages",
+      "items": ["Spanish (Native)", "English (B2)"]
+    }
+  ],
+  "lang": "en"
+}
