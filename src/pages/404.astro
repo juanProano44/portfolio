@@ -1,5 +1,9 @@
 ---
 import '@/styles/base.css';
+import { withBase } from '@/lib/paths';
+
+const enHome = withBase('en/');
+const esHome = withBase('es/');
 ---
 
 <html lang="en" data-theme="light">
@@ -27,9 +31,9 @@ import '@/styles/base.css';
           The page you're looking for doesn't exist or has been moved.
         </p>
         <div class="error-actions">
-          <a href="/en/" class="error-link">English</a>
+          <a href={enHome} class="error-link">English</a>
           <span class="error-separator">·</span>
-          <a href="/es/" class="error-link">Español</a>
+          <a href={esHome} class="error-link">Español</a>
         </div>
       </div>
     </div>

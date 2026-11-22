@@ -5,6 +5,8 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://juanproano44.github.io',
   base: '/portfolio',
+  // `ignore` avoids Astro's "go to /portfolio/ instead?" page in dev when the URL has no trailing slash.
+  trailingSlash: 'ignore',
   integrations: [
     sitemap({
       i18n: {

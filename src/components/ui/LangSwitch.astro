@@ -1,6 +1,7 @@
 ---
 import type { Lang } from '@/scripts/i18n';
 import { t } from '@/scripts/i18n';
+import { withBase } from '@/lib/paths';
 
 interface Props {
   lang: Lang;
@@ -8,7 +9,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const targetLang = t(lang, 'lang.switchTo');
-const targetUrl = `/${targetLang}/`;
+const targetUrl = withBase(`${targetLang}/`);
 ---
 
 <a href={targetUrl} class="lang-switch" aria-label={`Switch to ${t(lang, 'lang.switch')}`}>

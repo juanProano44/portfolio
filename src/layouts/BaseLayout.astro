@@ -1,6 +1,7 @@
 ---
 import '@/styles/base.css';
 import type { Lang } from '@/scripts/i18n';
+import { absoluteUrl, withBase } from '@/lib/paths';
 
 interface Props {
   lang: Lang;
@@ -10,9 +11,13 @@ interface Props {
 }
 
 const { lang, title, description, canonicalPath } = Astro.props;
-const altLang = lang === 'en' ? 'es' : 'en';
-const baseUrl = Astro.site?.origin ?? '';
-const canonicalUrl = `${baseUrl}/${lang}/${canonicalPath ?? ''}`;
+const origin = Astro.site?.origin ?? '';
+const localePath = `${lang}/${canonicalPath ?? ''}`;
+const canonicalUrl = absoluteUrl(localePath, origin);
+const hrefEn = absoluteUrl(`en/${canonicalPath ?? ''}`, origin);
+const hrefEs = absoluteUrl(`es/${canonicalPath ?? ''}`, origin);
+const fontPreload = withBase('fonts/space-grotesk-latin-wght-normal.woff2');
+const favicon = withBase('favicon.svg');
 ---
 
 <html lang={lang} data-theme="light">
@@ -24,21 +29,15 @@ const canonicalUrl = `${baseUrl}/${lang}/${canonicalPath ?? ''}`;
 
     <!-- Canonical + hreflang -->
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="alternate" hreflang="en" href={`${baseUrl}/en/${canonicalPath ?? ''}`} />
-    <link rel="alternate" hreflang="es" href={`${baseUrl}/es/${canonicalPath ?? ''}`} />
-    <link rel="alternate" hreflang="x-default" href={`${baseUrl}/en/${canonicalPath ?? ''}`} />
+    <link rel="alternate" hreflang="en" href={hrefEn} />
+    <link rel="alternate" hreflang="es" href={hrefEs} />
+    <link rel="alternate" hreflang="x-default" href={hrefEn} />
 
     <!-- Preload critical fonts -->
-    <link
-      rel="preload"
-      href="/fonts/space-grotesk-latin-wght-normal.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="preload" href={fontPreload} as="font" type="font/woff2" crossorigin />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={favicon} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
@@ -59,10 +58,10 @@ const canonicalUrl = `${baseUrl}/${lang}/${canonicalPath ?? ''}`;
       "@type": "Person",
       "name": "Juan José Proaño",
       "jobTitle": lang === 'en' ? "Full Stack Developer" : "Desarrollador Full Stack",
-      "url": baseUrl,
+      "url": canonicalUrl,
       "sameAs": [
-        "https://github.com/jupdev44",
-        "https://linkedin.com/in/juanjproano"
+        "https://github.com/juanProano44",
+        "https://www.linkedin.com/in/juanjoseproano/"
       ],
       "address": {
         "@type": "PostalAddress",

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Visual regression', () => {
   test('EN page - light theme - desktop', async ({ page }) => {
-    await page.goto('/en/');
+    await page.goto('en/');
     await page.evaluate(() => {
       document.documentElement.setAttribute('data-theme', 'light');
       sessionStorage.setItem('intro-seen', '1');
@@ -16,7 +16,7 @@ test.describe('Visual regression', () => {
   });
 
   test('EN page - dark theme - desktop', async ({ page }) => {
-    await page.goto('/en/');
+    await page.goto('en/');
     await page.evaluate(() => {
       document.documentElement.setAttribute('data-theme', 'dark');
       sessionStorage.setItem('intro-seen', '1');
@@ -31,7 +31,7 @@ test.describe('Visual regression', () => {
   });
 
   test('ES page - light theme - desktop', async ({ page }) => {
-    await page.goto('/es/');
+    await page.goto('es/');
     await page.evaluate(() => {
       document.documentElement.setAttribute('data-theme', 'light');
       sessionStorage.setItem('intro-seen', '1');

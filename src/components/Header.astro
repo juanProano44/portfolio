@@ -3,6 +3,7 @@ import type { Lang } from '@/scripts/i18n';
 import { t } from '@/scripts/i18n';
 import ThemeToggle from '@/components/ui/ThemeToggle.astro';
 import LangSwitch from '@/components/ui/LangSwitch.astro';
+import { withBase } from '@/lib/paths';
 
 interface Props {
   lang: Lang;
@@ -22,7 +23,7 @@ const frames = [
 
 <header class="site-header" role="banner">
   <div class="header-inner">
-    <a href={`/${lang}/`} class="logo-mark" aria-label="JP — Home">
+    <a href={withBase(`${lang}/`)} class="logo-mark" aria-label="JP — Home">
       <span class="logo-text">JP</span>
     </a>
 

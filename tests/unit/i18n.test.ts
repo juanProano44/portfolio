@@ -19,6 +19,12 @@ describe('i18n', () => {
   it('extracts language from URL', () => {
     expect(getLangFromUrl(new URL('https://example.com/en/'))).toBe('en');
     expect(getLangFromUrl(new URL('https://example.com/es/'))).toBe('es');
+    expect(
+      getLangFromUrl(new URL('https://juanproano44.github.io/portfolio/en/')),
+    ).toBe('en');
+    expect(
+      getLangFromUrl(new URL('https://juanproano44.github.io/portfolio/es/')),
+    ).toBe('es');
     expect(getLangFromUrl(new URL('https://example.com/fr/'))).toBe('en');
     expect(getLangFromUrl(new URL('https://example.com/'))).toBe('en');
   });

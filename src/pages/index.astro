@@ -1,5 +1,8 @@
 ---
-// Root index redirects to English by default
+import { withBase } from '@/lib/paths';
+
+const enHome = withBase('en/');
 ---
 
-<meta http-equiv="refresh" content="0;url=/en/" />
+<meta http-equiv="refresh" content={`0;url=${enHome}`} />
+<link rel="canonical" href={enHome} />

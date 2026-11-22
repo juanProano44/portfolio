@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jupdev44.dev/sitemap-index.xml
+Sitemap: https://juanproano44.github.io/portfolio/sitemap-index.xml

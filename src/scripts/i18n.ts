@@ -76,7 +76,8 @@ export function t(lang: Lang, key: keyof (typeof ui)['en']): string {
 }
 
 export function getLangFromUrl(url: URL): Lang {
-  const [, lang] = url.pathname.split('/');
+  const parts = url.pathname.split('/').filter(Boolean);
+  const lang = parts.find((p) => p === 'en' || p === 'es');
   if (lang === 'en' || lang === 'es') return lang;
   return defaultLang;
 }
