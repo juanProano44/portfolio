@@ -1,0 +1,100 @@
+---
+import '@/styles/base.css';
+---
+
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404 — Page Not Found | Juan Proaño</title>
+    <meta name="robots" content="noindex" />
+
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="error-page">
+      <div class="error-content">
+        <span class="error-code">404</span>
+        <h1 class="error-title">Page not found</h1>
+        <p class="error-description">
+          The page you're looking for doesn't exist or has been moved.
+        </p>
+        <div class="error-actions">
+          <a href="/en/" class="error-link">English</a>
+          <span class="error-separator">·</span>
+          <a href="/es/" class="error-link">Español</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  .error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    padding: var(--space-8);
+    text-align: center;
+  }
+
+  .error-content {
+    max-width: 480px;
+  }
+
+  .error-code {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    font-weight: 700;
+    color: var(--color-fg-faint);
+    line-height: 1;
+    margin-bottom: var(--space-4);
+  }
+
+  .error-title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .error-description {
+    color: var(--color-fg-secondary);
+    margin-bottom: var(--space-8);
+  }
+
+  .error-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  .error-link {
+    font-weight: 600;
+    color: var(--color-fg);
+    text-decoration: none;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .error-link:hover {
+    background-color: var(--color-bg-subtle);
+    border-color: var(--color-fg-faint);
+  }
+
+  .error-separator {
+    color: var(--color-fg-faint);
+  }
+</style>

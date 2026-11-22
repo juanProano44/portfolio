@@ -37,8 +37,14 @@ jobs:
       - name: Format check
         run: pnpm format:check
 
+      - name: Unit tests
+        run: pnpm test
+
       - name: Build
         run: pnpm build
+
+      - name: Bundle size check
+        run: bash scripts/check-bundle-size.sh
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
