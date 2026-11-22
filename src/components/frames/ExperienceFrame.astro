@@ -1,0 +1,240 @@
+---
+import type { Lang } from '@/scripts/i18n';
+import { t } from '@/scripts/i18n';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const allExperience = await getCollection('experience');
+const experience = allExperience
+  .filter((e) => e.data.lang === lang)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const allEducation = await getCollection('education');
+const education = allEducation.filter((e) => e.data.lang === lang);
+
+const allLeadership = await getCollection('leadership');
+const leadership = allLeadership.filter((l) => l.data.lang === lang);
+---
+
+<section id="experience" class="frame experience-frame" aria-label={t(lang, 'nav.experience')}>
+  <div class="frame-container">
+    <h2 class="frame-title">{t(lang, 'experience.title')}</h2>
+
+    <!-- Work Experience -->
+    <div class="timeline">
+      {
+        experience.map((job) => (
+          <article class="timeline-item">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3 class="timeline-role">{job.data.role}</h3>
+                <span class="timeline-period">{job.data.period}</span>
+              </div>
+              <p class="timeline-company">{job.data.company}</p>
+              <p class="timeline-description">{job.data.description}</p>
+              <ul class="timeline-highlights" role="list">
+                {job.data.highlights.map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- Education -->
+    <h3 class="subsection-title">{t(lang, 'experience.education')}</h3>
+    <div class="education-list">
+      {
+        education.map((edu) => (
+          <article class="edu-item">
+            <div class="edu-header">
+              <h4 class="edu-degree">{edu.data.degree}</h4>
+              <span class="edu-period">{edu.data.period}</span>
+            </div>
+            <p class="edu-institution">{edu.data.institution}</p>
+            {edu.data.description && <p class="edu-description">{edu.data.description}</p>}
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- Leadership -->
+    <h3 class="subsection-title">{t(lang, 'experience.leadership')}</h3>
+    <div class="leadership-list">
+      {
+        leadership.map((lead) => (
+          <article class="lead-item">
+            <div class="lead-header">
+              <h4 class="lead-role">{lead.data.role}</h4>
+              <span class="lead-period">{lead.data.period}</span>
+            </div>
+            <p class="lead-org">{lead.data.organization}</p>
+            <p class="lead-description">{lead.data.description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .experience-frame {
+    padding: var(--space-16) 0;
+  }
+
+  .frame-container {
+    max-width: var(--max-width);
+    margin-inline: auto;
+    padding-inline: var(--frame-padding);
+  }
+
+  .frame-title {
+    margin-bottom: var(--space-10);
+  }
+
+  .subsection-title {
+    font-size: var(--text-2xl);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-6);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  /* ── Timeline ── */
+  .timeline {
+    position: relative;
+    padding-left: var(--space-8);
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: var(--space-2);
+    bottom: var(--space-2);
+    width: 1px;
+    background-color: var(--color-border);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: var(--space-8);
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: calc(-1 * var(--space-8) - 4px);
+    top: var(--space-1);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: var(--color-fg);
+    border: 2px solid var(--color-bg);
+  }
+
+  .timeline-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-1);
+  }
+
+  .timeline-role {
+    font-size: var(--text-lg);
+  }
+
+  .timeline-period {
+    font-size: var(--text-sm);
+    color: var(--color-fg-muted);
+    font-family: var(--font-mono);
+  }
+
+  .timeline-company {
+    font-size: var(--text-base);
+    color: var(--color-fg-secondary);
+    margin-bottom: var(--space-3);
+  }
+
+  .timeline-description {
+    font-size: var(--text-sm);
+    color: var(--color-fg-secondary);
+    margin-bottom: var(--space-3);
+  }
+
+  .timeline-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .timeline-highlights li {
+    font-size: var(--text-sm);
+    color: var(--color-fg-secondary);
+    padding-left: var(--space-4);
+    position: relative;
+  }
+
+  .timeline-highlights li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-fg-faint);
+  }
+
+  /* ── Education ── */
+  .edu-item,
+  .lead-item {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--space-4);
+  }
+
+  .edu-header,
+  .lead-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-1);
+  }
+
+  .edu-degree,
+  .lead-role {
+    font-size: var(--text-base);
+  }
+
+  .edu-period,
+  .lead-period {
+    font-size: var(--text-sm);
+    color: var(--color-fg-muted);
+    font-family: var(--font-mono);
+  }
+
+  .edu-institution,
+  .lead-org {
+    font-size: var(--text-sm);
+    color: var(--color-fg-secondary);
+    margin-bottom: var(--space-2);
+  }
+
+  .edu-description,
+  .lead-description {
+    font-size: var(--text-sm);
+    color: var(--color-fg-muted);
+  }
+</style>

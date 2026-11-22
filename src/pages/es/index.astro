@@ -1,15 +1,32 @@
 ---
-// Placeholder - will be replaced in Phase 2
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import IdentityFrame from '@/components/frames/IdentityFrame.astro';
+import WorkFrame from '@/components/frames/WorkFrame.astro';
+import StackFrame from '@/components/frames/StackFrame.astro';
+import ExperienceFrame from '@/components/frames/ExperienceFrame.astro';
+import LabFrame from '@/components/frames/LabFrame.astro';
+import ContactFrame from '@/components/frames/ContactFrame.astro';
+
+const lang = 'es' as const;
 ---
 
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Juan Proaño — Desarrollador Full Stack</title>
-  </head>
-  <body>
-    <h1>Juan José Proaño</h1>
-    <p>Desarrollador Full Stack · AWS · Despliegue en la Nube</p>
-  </body>
-</html>
+<BaseLayout
+  lang={lang}
+  title="Juan Proaño — Desarrollador Full Stack"
+  description="Desarrollador full stack con experiencia en AWS y despliegue en la nube. Construyendo aplicaciones web escalables con React, TypeScript, NestJS y Terraform."
+>
+  <Header lang={lang} slot="header" />
+
+  <div class="board" data-board>
+    <IdentityFrame lang={lang} />
+    <WorkFrame lang={lang} />
+    <StackFrame lang={lang} />
+    <ExperienceFrame lang={lang} />
+    <LabFrame lang={lang} />
+    <ContactFrame lang={lang} />
+  </div>
+
+  <Footer lang={lang} slot="footer" />
+</BaseLayout>

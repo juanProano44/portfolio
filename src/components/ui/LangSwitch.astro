@@ -1,0 +1,37 @@
+---
+import type { Lang } from '@/scripts/i18n';
+import { t } from '@/scripts/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const targetLang = t(lang, 'lang.switchTo');
+const targetUrl = `/${targetLang}/`;
+---
+
+<a href={targetUrl} class="lang-switch" aria-label={`Switch to ${t(lang, 'lang.switch')}`}>
+  {t(lang, 'lang.switch')}
+</a>
+
+<style>
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--border-radius-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-fg-secondary);
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .lang-switch:hover {
+    color: var(--color-fg);
+    background-color: var(--color-bg-muted);
+  }
+</style>
